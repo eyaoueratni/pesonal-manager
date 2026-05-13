@@ -1,0 +1,24 @@
+# Backend
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/.env
+backend/uploads/
+backend/vectorstores/
+backend/*.pyc
+backend/*.db
+
+# Frontend
+frontend/shadcn-admin/node_modules/
+frontend/shadcn-admin/dist/
+frontend/shadcn-admin/.env
+frontend/shadcn-admin/.env.local
+
+# General
+.DS_Store
+*.log
+Thumbs.db
+*.sqlite3
+backend/node_modules/
+node_modules/
+.env
