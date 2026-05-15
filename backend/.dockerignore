@@ -1,0 +1,7 @@
+venv/
+node_modules/
+uploads/
+vectorstores/
+.env
+__pycache__
+*.pyc
