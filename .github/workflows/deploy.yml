@@ -87,7 +87,7 @@ jobs:
           node-version: "20"
 
       - name: Install dependencies
-        run: cd frontend/shadcn-admin && pnpm install
+        run: cd frontend/shadcn-admin && pnpm install --no-forzen-lockfile
 
       - name: Lint
         run: echo "lint skipped for now"
