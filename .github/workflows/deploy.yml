@@ -75,25 +75,28 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
+          cache: "pnpm"
           cache-dependency-path: frontend/shadcn-admin/package-lock.json
 
       - name: Install dependencies
-        run: cd frontend/shadcn-admin && npm ci
+        run: cd frontend/shadcn-admin && pnpm ci
 
       - name: Lint
         run: echo "lint skipped for now"
 
       - name: Run tests
-        run: cd frontend/shadcn-admin && npm test -- --watchAll=false --passWithNoTests
+        run: cd frontend/shadcn-admin && pnpm test -- --watchAll=false --passWithNoTests
 
       - name: Build check
-        run: cd frontend/shadcn-admin && npm run build
+        run: cd frontend/shadcn-admin && pnpm run build
         env:
           VITE_API_URL: ${{ secrets.VITE_API_URL }}
 
