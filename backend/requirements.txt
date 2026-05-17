@@ -31,3 +31,9 @@ typing_extensions==4.15.0
 uvicorn==0.41.0
 watchfiles==1.1.1
 websockets==16.0
+pymupdf
+groq
+langchain
+langchain-community
+chromadb
+sentence-transformers
