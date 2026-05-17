@@ -38,3 +38,6 @@ langchain-community
 chromadb
 sentence-transformers
 faiss-cpu
+pymupdf
+numpy
+groq

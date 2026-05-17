@@ -15,7 +15,7 @@ load_dotenv()
 # CONFIG
 # ─────────────────────────────────────────────
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-OLLAMA_URL = "http://localhost:11434"
+OLLAMA_URL = os.getenv("OLLAMA_BASE_URL", "http://ollama:11434")
 EMBED_MODEL = "nomic-embed-text"  # still using Ollama for embeddings (lightweight)
 GROQ_MODEL = "llama-3.3-70b-versatile" # fast and accurate on Groq
 VECTORSTORE_DIR = "vectorstores"
