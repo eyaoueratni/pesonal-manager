@@ -75,25 +75,25 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 9
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "pnpm"
-          cache-dependency-path: frontend/shadcn-admin/package-lock.json
 
       - name: Install dependencies
-        run: cd frontend/shadcn-admin && pnpm ci
+        run: cd frontend/shadcn-admin && pnpm install
 
       - name: Lint
         run: echo "lint skipped for now"
 
       - name: Run tests
-        run: cd frontend/shadcn-admin && pnpm test -- --watchAll=false --passWithNoTests
+        run: cd frontend/shadcn-admin && pnpm test --passWithNoTests
 
       - name: Build check
         run: cd frontend/shadcn-admin && pnpm run build
@@ -183,17 +183,11 @@ jobs:
             set -e
             cd /opt/personal-manager
 
-            # Log in to registry
             echo "${{ secrets.GITHUB_TOKEN }}" | \
               docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            # Pull new images
             docker compose pull
-
-            # Restart containers
             docker compose up -d --remove-orphans
-
-            # Clean old images
             docker image prune -f
 
             echo "✅ Deployed successfully"
