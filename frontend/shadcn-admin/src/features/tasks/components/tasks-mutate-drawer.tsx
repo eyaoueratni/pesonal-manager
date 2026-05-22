@@ -193,12 +193,11 @@ export function TasksMutateDrawer({
             onSubmit={form.handleSubmit(onSubmit)}
             className='flex-1 space-y-5 overflow-y-auto px-4'
           >
-            {/* Recurring badge */}
-            {(isRecurringChild || (isUpdate && currentRow?.is_recurring)) && (
-              <div className='rounded-md bg-blue-50 px-3 py-2 text-xs text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'>
-                🔁 Recurring task — saving will update this and all future occurrences.
-              </div>
-            )}
+      {(isRecurringChild || (isUpdate && currentRow?.is_recurring)) && (
+  <div className='rounded-md bg-blue-50 px-3 py-2 text-xs text-blue-700 dark:bg-blue-900/30 dark:text-blue-300'>
+    🔁 Recurring task — only this occurrence will be updated.
+  </div>
+)}
 
             {/* Conflict error banner */}
             {conflictError && (

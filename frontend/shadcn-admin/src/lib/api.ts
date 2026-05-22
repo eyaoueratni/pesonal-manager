@@ -25,8 +25,8 @@ export const userAPI = {
   getMe: () => api.get('/users/me'),
   updateProfile: (data: { username?: string; email?: string }) => 
     api.put('/users/me', data),
-  changePassword: (data: { current_password: string; new_password: string }) => 
-    api.put('/users/me/password', data),
+changePassword: (data: { current_password: string; new_password: string }) => 
+    api.post('/auth/change-password', data),
   deleteAccount: () => api.delete('/users/me'),
 }
 export const documentAPI = {

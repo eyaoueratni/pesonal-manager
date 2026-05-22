@@ -1,17 +1,16 @@
+import { PasswordInput } from '@/components/password-input'
 import { Button } from '@/components/ui/button'
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { cn } from '@/lib/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link } from '@tanstack/react-router'
-import { ArrowRight, Loader2 } from 'lucide-react'
+import { Link, useNavigate } from '@tanstack/react-router'
+import { Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -51,20 +50,26 @@ const styles = `
   .si-success-icon { font-size: 3rem; margin-bottom: 1rem; }
   .si-success-title { font-family: 'Sora', sans-serif; font-size: 1.4rem; font-weight: 700; color: #1a1a2e; margin-bottom: 0.5rem; }
   .si-success-sub { font-size: 0.88rem; color: #6b7280; line-height: 1.6; }
+  .si-invalid { text-align: center; padding: 2rem 0; }
 `
 
-const formSchema = z.object({
-  email: z.string().email('Please enter a valid email'),
-})
+const formSchema = z
+  .object({
+    new_password: z.string().min(6, 'Password must be at least 6 characters'),
+    confirm_password: z.string().min(1, 'Please confirm your password'),
+  })
+  .refine((data) => data.new_password === data.confirm_password, {
+    message: "Passwords don't match",
+    path: ['confirm_password'],
+  })
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
-export function ForgotPasswordForm({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLFormElement>) {
+export function ResetPasswordForm() {
+  const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
-  const [sent, setSent] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [token, setToken] = useState<string | null>(null)
 
   useEffect(() => {
     const styleEl = document.createElement('style')
@@ -73,24 +78,38 @@ export function ForgotPasswordForm({
     return () => document.head.removeChild(styleEl)
   }, [])
 
+  useEffect(() => {
+    // Get token from URL
+    const params = new URLSearchParams(window.location.search)
+    setToken(params.get('token'))
+  }, [])
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { email: '' },
+    defaultValues: { new_password: '', confirm_password: '' },
   })
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    if (!token) {
+      toast.error('Invalid reset link.')
+      return
+    }
     setIsLoading(true)
     try {
-      const res = await fetch(`${API_URL}/auth/forgot-password`, {
+      const res = await fetch(`${API_URL}/auth/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: data.email }),
+        body: JSON.stringify({ token, new_password: data.new_password }),
       })
-      if (!res.ok) throw new Error('Something went wrong')
-      setSent(true)
-      toast.success(`Reset link sent to ${data.email}`)
-    } catch {
-      toast.error('Failed to send reset email. Please try again.')
+      if (!res.ok) {
+        const error = await res.json()
+        throw new Error(error.detail || 'Something went wrong')
+      }
+      setSuccess(true)
+      toast.success('Password reset successfully!')
+      setTimeout(() => navigate({ to: '/sign-in' }), 2000)
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to reset password')
     } finally {
       setIsLoading(false)
     }
@@ -104,41 +123,59 @@ export function ForgotPasswordForm({
 
       <div className='si-left'>
         <div className='si-card'>
-          <span className='si-logo'>Personal Manager</span>
+          <span className='si-logo'>Planora</span>
 
-          {sent ? (
+          {success ? (
             <div className='si-success'>
-              <div className='si-success-icon'>📧</div>
-              <div className='si-success-title'>Check your inbox</div>
+              <div className='si-success-icon'>✅</div>
+              <div className='si-success-title'>Password reset!</div>
               <p className='si-success-sub'>
-                We sent a password reset link to your email.
-                The link expires in 1 hour.
+                Your password has been changed successfully.
+                Redirecting to sign in...
+              </p>
+            </div>
+          ) : !token ? (
+            <div className='si-invalid'>
+              <div className='si-success-icon'>❌</div>
+              <div className='si-success-title'>Invalid Link</div>
+              <p className='si-success-sub'>
+                This reset link is invalid or has expired.
               </p>
               <p className='si-footer-text' style={{ marginTop: '1.5rem' }}>
-                <Link to='/sign-in'>Back to sign in</Link>
+                <Link to='/forgot-password'>Request a new link</Link>
               </p>
             </div>
           ) : (
             <>
-              <h1 className='si-title'>Forgot password?</h1>
+              <h1 className='si-title'>Reset password</h1>
               <p className='si-subtitle'>
-                Enter your email and we'll send you a link to reset your password.
+                Enter your new password below.
               </p>
 
               <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(onSubmit)}
-                  className={cn('', className)}
-                  {...props}
-                >
+                <form onSubmit={form.handleSubmit(onSubmit)}>
                   <FormField
                     control={form.control}
-                    name='email'
+                    name='new_password'
                     render={({ field }) => (
                       <FormItem className='si-field'>
-                        <FormLabel className='si-label'>Email</FormLabel>
+                        <FormLabel className='si-label'>New Password</FormLabel>
                         <FormControl>
-                          <Input placeholder='name@example.com' {...field} />
+                          <PasswordInput placeholder='••••••••' {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name='confirm_password'
+                    render={({ field }) => (
+                      <FormItem className='si-field'>
+                        <FormLabel className='si-label'>Confirm Password</FormLabel>
+                        <FormControl>
+                          <PasswordInput placeholder='••••••••' {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -149,8 +186,7 @@ export function ForgotPasswordForm({
                     {isLoading
                       ? <Loader2 className='animate-spin' style={{ marginRight: 8 }} />
                       : null}
-                    Send reset link
-                    {!isLoading && <ArrowRight style={{ marginLeft: 8 }} />}
+                    Reset Password
                   </Button>
                 </form>
               </Form>
@@ -168,10 +204,10 @@ export function ForgotPasswordForm({
         <div className='si-right-blob si-right-blob1' />
         <div className='si-right-blob si-right-blob2' />
         <h2 className='si-right-title'>
-          Secure your<br />account.
+          Keep your<br />account safe.
         </h2>
         <p className='si-right-sub'>
-          Reset your password and get back to managing your tasks, documents and finances.
+          Choose a strong password to protect your tasks, documents and personal data.
         </p>
       </div>
     </div>

@@ -1,7 +1,5 @@
-import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
-import { ProfileDropdown } from '@/components/profile-dropdown'
-import { Search } from '@/components/search'
+import { PageHeader } from '@/components/layout/page-header'
 import { Button } from '@/components/ui/button'
 import { api, taskAPI } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth-store'
@@ -25,7 +23,6 @@ import {
   TriangleAlert,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
-
 // ─────────────────────────────────────────────
 // Types
 // ─────────────────────────────────────────────
@@ -180,12 +177,7 @@ export function Dashboard() {
 
   return (
     <>
-      <Header>
-        <Search />
-        <div className='ms-auto flex items-center space-x-4'>
-          <ProfileDropdown />
-        </div>
-      </Header>
+     <PageHeader/>
 
       <Main>
         <style>{`

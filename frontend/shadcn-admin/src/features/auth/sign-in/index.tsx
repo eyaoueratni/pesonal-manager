@@ -11,6 +11,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { authAPI } from '@/lib/api'
 import { useAuthStore } from '@/stores/auth-store'
+import '@/styles/homebase.css'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate } from '@tanstack/react-router'
 import { AxiosError } from 'axios'
@@ -19,7 +20,6 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
-import '@/styles/homebase.css'
 
 const formSchema = z.object({
   email: z.string().email('Please enter a valid email'),
@@ -73,7 +73,7 @@ export function SignIn({ redirectTo }: SignInProps) {
       <div className='hb-auth-left'>
         <div className='hb-glass-card hb-auth-card'>
           <div className='hb-logo' style={{ textAlign: 'center', marginBottom: '2rem', display: 'block' }}>
-            HomeBase
+            Personal Manager
           </div>
 
           <h1 className='hb-auth-title'>Welcome back</h1>

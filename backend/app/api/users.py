@@ -99,3 +99,26 @@ def delete_account(
     db.delete(current_user)
     db.commit()
     return {"message": "Account deleted successfully"}
+
+
+from app.core.security import hash_password, verify_password
+from pydantic import BaseModel
+
+class ChangePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str
+
+@router.post("/change-password")
+def change_password(
+    data: ChangePasswordRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    # Verify current password
+    if not verify_password(data.current_password, current_user.hashed_password):
+        raise HTTPException(status_code=400, detail="Current password is incorrect")
+    
+    # Update password
+    current_user.hashed_password = hash_password(data.new_password)
+    db.commit()
+    return {"message": "Password changed successfully"}

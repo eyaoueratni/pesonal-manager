@@ -343,7 +343,7 @@ export default function LandingPage() {
     <div className="hb-root">
       {/* NAV */}
       <nav className="hb-nav">
-        <span className="hb-logo">HomeBase</span>
+        <span className="hb-logo">Personal Manager</span>
         <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
           <button className="hb-btn-secondary" style={{ padding: "0.45rem 1.1rem", fontSize: "0.9rem" }} onClick={goToSignin}>Sign in</button>
           <button className="hb-nav-btn" onClick={goToSignup}>Get started</button>

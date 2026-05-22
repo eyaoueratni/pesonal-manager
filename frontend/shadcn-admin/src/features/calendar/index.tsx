@@ -1,7 +1,5 @@
-import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
-import { ProfileDropdown } from '@/components/profile-dropdown'
-import { Search } from '@/components/search'
+import { PageHeader } from '@/components/layout/page-header'
 import { DayView } from './components/calendar-day-view'
 import { CalendarHeader } from './components/calendar-header'
 import { MonthView } from './components/calendar-month-view'
@@ -59,13 +57,9 @@ function CalendarContent() {
 export function Calendar() {
   return (
     <CalendarProvider>
-      <Header fixed>
-        <Search />
-        <div className='ms-auto flex items-center space-x-4'>
-         
-          <ProfileDropdown />
-        </div>
-      </Header>
+      <PageHeader/>
+        
+      
 
       <CalendarContent />
     </CalendarProvider>

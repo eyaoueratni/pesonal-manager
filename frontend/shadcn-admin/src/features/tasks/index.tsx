@@ -1,7 +1,5 @@
-import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
-import { ProfileDropdown } from '@/components/profile-dropdown'
-import { Search } from '@/components/search'
+import { PageHeader } from '@/components/layout/page-header'
 import { TasksDialogs } from './components/tasks-dialogs'
 import { TasksPrimaryButtons } from './components/tasks-primary-buttons'
 import { TasksProvider, useTasks } from './components/tasks-provider'
@@ -32,20 +30,11 @@ function TasksContent() {
     </Main>
   )
 }
-
 export function Tasks() {
   return (
     <TasksProvider>
-      <Header fixed>
-        <Search />
-        <div className='ms-auto flex items-center space-x-4'>
-          
-          <ProfileDropdown />
-        </div>
-      </Header>
-
+      <PageHeader />
       <TasksContent />
-
       <TasksDialogs />
     </TasksProvider>
   )

@@ -6,15 +6,11 @@ import { Search } from '@/components/search'
 
 import { Separator } from '@/components/ui/separator'
 import { Outlet } from '@tanstack/react-router'
-import { Bell, UserCog, Wrench } from 'lucide-react'
+import { Bell, Wrench } from 'lucide-react'
 import { SidebarNav } from './components/sidebar-nav'
 
 const sidebarNavItems = [
-  {
-    title: 'Profile',
-    href: '/settings',
-    icon: <UserCog size={18} />,
-  },
+  
   {
     title: 'Account',
     href: '/settings/account',

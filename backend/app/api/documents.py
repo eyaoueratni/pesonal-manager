@@ -12,6 +12,7 @@ from app.schemas.document import DocumentResponse, DocumentUpdate
 from app.core.dependencies import get_current_user
 from app.models.user import User
 from app.services.rag_processor import process_document, chat_with_document
+from app.services.notification_service import create_notification
 
 router = APIRouter(prefix="/documents", tags=["Documents"])
 
@@ -110,6 +111,31 @@ async def upload_document(
     db.add(doc)
     db.commit()
     db.refresh(doc)
+
+    # ── Notifications ─────────────────────────────────────────
+    if extracted_data:
+        # Notify document processed successfully
+        create_notification(
+            db=db,
+            user_id=current_user.id,
+            title="✅ Document traité",
+            message=f"Votre document '{doc.title}' a été analysé avec succès.",
+            notification_type="success",
+        )
+
+        # Check if deadline is tomorrow or soon
+        deadline = extracted_data.get("deadline")
+        amount = extracted_data.get("amount")
+
+        if deadline and deadline.lower() not in ["null", "none", "n/a", ""]:
+            create_notification(
+                db=db,
+                user_id=current_user.id,
+                title="⚠️ Échéance détectée",
+                message=f"Une échéance a été trouvée dans '{doc.title}': {deadline}. Montant: {amount or 'Non spécifié'}.",
+                notification_type="warning",
+            )
+
     return doc
 
 
@@ -279,3 +305,4 @@ async def test_ollama():
         }
     except Exception as e:
         return {"ollama_running": False, "error": str(e)}
+    

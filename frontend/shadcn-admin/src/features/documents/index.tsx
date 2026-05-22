@@ -1,7 +1,5 @@
-import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
-import { ProfileDropdown } from '@/components/profile-dropdown'
-import { Search } from '@/components/search'
+import { PageHeader } from '@/components/layout/page-header'
 import { DocumentsProvider } from '../documents/components/documents-provider'
 import { DocumentSummaryPanel } from '../documents/components/documents-summary-panel'
 import { DocumentsTable } from '../documents/components/documents-table'
@@ -27,12 +25,7 @@ function DocumentsContent() {
 export function Documents() {
   return (
     <DocumentsProvider>
-      <Header fixed>
-        <Search />
-        <div className='ms-auto flex items-center space-x-4'>
-          <ProfileDropdown />
-        </div>
-      </Header>
+      <PageHeader/>
 
       <DocumentsContent />
     </DocumentsProvider>

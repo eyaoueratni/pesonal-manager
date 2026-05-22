@@ -18,9 +18,9 @@ export const sidebarDataUser: SidebarData = {
   },
   teams: [
     {
-      name: 'HomeBase',
+      name: 'Personal manager',
       logo: Command,
-      plan: 'Personal Organizer',
+      plan: ' Organizer',
     },
   ],
   navGroups: [
@@ -49,7 +49,7 @@ export const sidebarDataUser: SidebarData = {
         },
         {
           title: 'Finance Tracker',
-          url: '/dashboard/finance',
+          url: '/finance',
           icon: DollarSign,
         },
       ],

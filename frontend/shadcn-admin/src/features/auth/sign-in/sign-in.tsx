@@ -10,7 +10,6 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { authAPI } from '@/lib/api'
-import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/stores/auth-store'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate } from '@tanstack/react-router'
@@ -419,7 +418,7 @@ export function SignIn({ redirectTo }: SignInProps) {
       {/* ── Left: Form ── */}
       <div className='si-left'>
         <div className='si-card'>
-          <span className='si-logo'>HomeBase</span>
+          <span className='si-logo'>Personal Manager</span>
 
           <h1 className='si-title'>Welcome back</h1>
           <p className='si-subtitle'>

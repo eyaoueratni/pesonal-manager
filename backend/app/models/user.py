@@ -21,3 +21,5 @@ class User(Base):
     #tasks relationships 
     tasks=relationship("Task", back_populates="user", cascade="all, delete-orphan")
     documents = relationship("Document", back_populates="user")
+    notifications = relationship("Notification", back_populates="user")
+    finances = relationship("Finance", back_populates="user")

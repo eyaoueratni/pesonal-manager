@@ -169,7 +169,7 @@ def process_document(file_bytes: bytes, filename: str, doc_id: str) -> dict:
     questions = {
         "document_type": "What type of document is this? Answer in a short phrase.",
         "summary": "Summarize this document in 2 sentences.",
-        "deadline": "Is there a payment deadline or due date? If yes state it exactly, if no say null.",
+        "deadline": "Is there a payment deadline or due date? If yes, return it in DD/MM/YYYY format only (example: 30/11/2025). If no deadline exists say null.",
         "amount": "Is there a total amount to pay? If yes state it exactly with currency, if no say null.",
         "action_required": "What does the person need to do because of this document?",
     }
