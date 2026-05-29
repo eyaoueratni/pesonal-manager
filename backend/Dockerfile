@@ -3,7 +3,8 @@ FROM python:3.11-slim AS builder
 
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install --user --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip && \
+    pip install --user --no-cache-dir -r requirements.txt --no-deps
 
 # ── Stage 2: Runtime ──────────────────────────────────────────────
 FROM python:3.11-slim
