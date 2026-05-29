@@ -19,7 +19,7 @@ frontend/shadcn-admin/.env.local
 *.log
 Thumbs.db
 *.sqlite3
-backend/node_modules/
+backend/node_modules
 node_modules/
 .env
 k8s/secrets.yaml
