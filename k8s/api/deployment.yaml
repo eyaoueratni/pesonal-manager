@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: personal-manager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: api
+          image: 449024774815.dkr.ecr.eu-north-1.amazonaws.com/personal-manager-backend:latest
+          envFrom:
+            - secretRef:
+                name: app-secrets
+          ports:
+            - containerPort: 8000

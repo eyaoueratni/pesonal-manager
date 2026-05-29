@@ -22,3 +22,4 @@ Thumbs.db
 backend/node_modules/
 node_modules/
 .env
+k8s/secrets.yaml
