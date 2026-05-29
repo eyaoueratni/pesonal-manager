@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: 449024774815.dkr.ecr.eu-north-1.amazonaws.com/personal-manager-backend:latest
+          image: 449024774815.dkr.ecr.eu-north-1.amazonaws.com/personal-manager-backend:cb0534fc5ee05e447ac7c441c540c250b516e2a5
           envFrom:
             - secretRef:
                 name: app-secrets
