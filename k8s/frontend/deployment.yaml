@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: 449024774815.dkr.ecr.eu-north-1.amazonaws.com/personal-manager-frontend:latest
+          image: 449024774815.dkr.ecr.eu-north-1.amazonaws.com/personal-manager-frontend:74d6ebb86558068c8c7aff971e85f8346812c905
           ports:
             - containerPort: 80
