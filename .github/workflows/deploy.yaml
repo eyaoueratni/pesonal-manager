@@ -60,11 +60,10 @@ jobs:
       - name: Build Frontend image
         run: |
           docker build \
-            --build-arg VITE_API_URL=http://${{ secrets.VPS_IP }}:30800 \
-            -t ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_FRONTEND }}:${{ github.sha }} \
-            ./frontend/shadcn-admin
-          docker tag ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_FRONTEND }}:${{ github.sha }} \
-                     ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_FRONTEND }}:latest
+          --no-cache \
+          --build-arg VITE_API_URL=http://${{ secrets.VPS_IP }}:30800 \
+          -t ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_FRONTEND }}:${{ github.sha }} \
+          ./frontend/shadcn-admin
 
       - name: Scan Frontend with Trivy
         uses: aquasecurity/trivy-action@master
