@@ -25,11 +25,12 @@ const styles = `
   .si-blob3 { width: 300px; height: 300px; background: #FFD93D; bottom: 20%; left: 10%; animation-delay: 4s; }
   @keyframes siFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.04); } }
   .si-left { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 2rem; position: relative; z-index: 1; }
-  .si-card input {
+ .si-card input {
     border-radius: 12px !important;
     border: 1.5px solid rgba(0,0,0,0.1) !important;
-    background: #fff !important;
+    background: #ffffff !important;
     color: #1a1a2e !important;
+    -webkit-text-fill-color: #1a1a2e !important;
     font-family: 'Nunito', sans-serif !important;
     font-size: 0.95rem !important;
     padding: 0.65rem 1rem !important;

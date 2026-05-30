@@ -69,14 +69,14 @@ const styles = `
 .si-card input {
     border-radius: 12px !important;
     border: 1.5px solid rgba(0,0,0,0.1) !important;
-    background: #fff !important;
+    background: #ffffff !important;
     color: #1a1a2e !important;
+    -webkit-text-fill-color: #1a1a2e !important;
     font-family: 'Nunito', sans-serif !important;
     font-size: 0.95rem !important;
     padding: 0.65rem 1rem !important;
     transition: border-color 0.15s, box-shadow 0.15s !important;
   }
-
   /* Logo */
   .si-logo {
     font-family: 'Sora', sans-serif;
