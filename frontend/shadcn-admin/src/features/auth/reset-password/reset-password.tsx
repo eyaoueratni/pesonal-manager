@@ -1,12 +1,12 @@
 import { PasswordInput } from '@/components/password-input'
 import { Button } from '@/components/ui/button'
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from '@/components/ui/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate } from '@tanstack/react-router'
@@ -25,7 +25,17 @@ const styles = `
   .si-blob3 { width: 300px; height: 300px; background: #FFD93D; bottom: 20%; left: 10%; animation-delay: 4s; }
   @keyframes siFloat { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.04); } }
   .si-left { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 2rem; position: relative; z-index: 1; }
-  .si-card { background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border: 1.5px solid rgba(255,255,255,0.9); border-radius: 28px; padding: 2.5rem; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,0.08); }
+  .si-card input {
+    border-radius: 12px !important;
+    border: 1.5px solid rgba(0,0,0,0.1) !important;
+    background: #fff !important;
+    color: #1a1a2e !important;
+    font-family: 'Nunito', sans-serif !important;
+    font-size: 0.95rem !important;
+    padding: 0.65rem 1rem !important;
+    transition: border-color 0.15s, box-shadow 0.15s !important;
+  }
+  
   .si-logo { font-family: 'Sora', sans-serif; font-size: 1.5rem; font-weight: 700; background: linear-gradient(135deg, #FF6B6B, #A855F7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 2rem; display: block; text-align: center; }
   .si-title { font-family: 'Sora', sans-serif; font-size: 1.6rem; font-weight: 700; color: #1a1a2e; margin-bottom: 0.35rem; }
   .si-subtitle { font-size: 0.9rem; color: #6b7280; margin-bottom: 2rem; line-height: 1.6; }

@@ -66,15 +66,15 @@ const styles = `
     z-index: 1;
   }
 
-  .si-card {
-    background: rgba(255,255,255,0.85);
-    backdrop-filter: blur(20px);
-    border: 1.5px solid rgba(255,255,255,0.9);
-    border-radius: 28px;
-    padding: 2.5rem;
-    width: 100%;
-    max-width: 420px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+.si-card input {
+    border-radius: 12px !important;
+    border: 1.5px solid rgba(0,0,0,0.1) !important;
+    background: #fff !important;
+    color: #1a1a2e !important;
+    font-family: 'Nunito', sans-serif !important;
+    font-size: 0.95rem !important;
+    padding: 0.65rem 1rem !important;
+    transition: border-color 0.15s, box-shadow 0.15s !important;
   }
 
   /* Logo */
