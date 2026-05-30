@@ -1,23 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api
+  name: frontend
   namespace: personal-manager
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api
+      app: frontend
   template:
     metadata:
       labels:
-        app: api
+        app: frontend
     spec:
       containers:
-        - name: api
-          image: 449024774815.dkr.ecr.eu-north-1.amazonaws.com/personal-manager-backend:cb0534fc5ee05e447ac7c441c540c250b516e2a5
-          envFrom:
-            - secretRef:
-                name: app-secrets
+        - name: frontend
+          image: 449024774815.dkr.ecr.eu-north-1.amazonaws.com/personal-manager-frontend:latest
           ports:
-            - containerPort: 8000
+            - containerPort: 80
