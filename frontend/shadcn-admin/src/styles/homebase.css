@@ -135,14 +135,17 @@
   background: #fff !important;
   font-family: var(--hb-font-body) !important;
   font-size: 0.95rem !important;
+
+.hb-glass-card input {
+  border-radius: 12px !important;
+  border: 1.5px solid rgba(0,0,0,0.1) !important;
+  background: #fff !important;
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+  font-family: var(--hb-font-body) !important;
+  font-size: 0.95rem !important;
   transition: border-color 0.15s, box-shadow 0.15s !important;
 }
-.hb-glass-card input:focus {
-  border-color: var(--hb-purple) !important;
-  box-shadow: 0 0 0 3px rgba(168,85,247,0.12) !important;
-  outline: none !important;
-}
-
 /* ─────────────────────────────────────────────
    AUTH LAYOUT (sign-in / sign-up)
 ───────────────────────────────────────────── */
