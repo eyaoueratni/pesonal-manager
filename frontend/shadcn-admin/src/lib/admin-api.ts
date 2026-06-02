@@ -1,12 +1,19 @@
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const API_URL = 'http://localhost:8000'
 
 const getHeaders = () => {
-  const authStorage = localStorage.getItem('auth-storage')
-  const token = authStorage ? JSON.parse(authStorage).state?.token : null
-  return {
-    Authorization: `Bearer ${token}`,
+  try {
+    const authStorage = localStorage.getItem('auth-storage')
+    if (!authStorage) return {}
+    const parsed = JSON.parse(authStorage)
+    const token = parsed?.state?.token
+    if (!token) return {}
+    return {
+      Authorization: `Bearer ${token}`,
+    }
+  } catch {
+    return {}
   }
 }
 export interface AdminUser {

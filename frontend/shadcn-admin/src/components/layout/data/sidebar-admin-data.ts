@@ -1,13 +1,8 @@
 import {
-  Activity,
   Command,
-  Database,
-  DollarSign,
   FileText,
   LayoutDashboard,
   ListTodo,
-  Settings,
-  Shield,
   Users,
 } from 'lucide-react'
 import { type SidebarData } from '../types'
@@ -20,7 +15,7 @@ export const sidebarDataAdmin: SidebarData = {
   },
   teams: [
     {
-      name: 'HomeBase Admin',
+      name: 'Personal Manager',
       logo: Command,
       plan: 'Administrator Panel',
     },
@@ -41,43 +36,13 @@ export const sidebarDataAdmin: SidebarData = {
         },
         {
           title: 'All Tasks',
-          url: '/tasks',
+          url: '/admin?tab=tasks',
           icon: ListTodo,
         },
         {
           title: 'All Documents',
-          url: '/documents',
+          url: '/admin?tab=documents',
           icon: FileText,
-        },
-        {
-          title: 'Financial Overview',
-          url: '/finance',
-          icon: DollarSign,
-        },
-      ],
-    },
-    {
-      title: 'System Management',
-      items: [
-        {
-          title: 'Analytics',
-          url: '/admin/analytics',
-          icon: Activity,
-        },
-        {
-          title: 'System Logs',
-          url: '/admin/logs',
-          icon: Database,
-        },
-        {
-          title: 'Security',
-          url: '/admin/security',
-          icon: Shield,
-        },
-        {
-          title: 'Settings',
-          url: '/admin/settings',
-          icon: Settings,
         },
       ],
     },

@@ -1,24 +1,33 @@
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
+  getAdminDocuments,
+  getAdminTasks,
   getDocumentsStats,
   getTasksStats,
   getUsers,
+  type AdminDocument,
+  type AdminTask,
   type AdminUser,
   type DocStats,
   type TaskStats,
 } from '@/lib/admin-api'
 import { useAuthStore } from '@/stores/auth-store'
+import { useSearch } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 
 export function DashboardAdmin() {
   const user = useAuthStore((state) => state.user)
   const [users, setUsers] = useState<AdminUser[]>([])
+  const [tasks, setTasks] = useState<AdminTask[]>([])
+  const [documents, setDocuments] = useState<AdminDocument[]>([])
   const [taskStats, setTaskStats] = useState<TaskStats>({ total: 0, completed: 0, pending: 0 })
   const [docStats, setDocStats] = useState<DocStats>({ total: 0, processed: 0, pending: 0 })
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const search = useSearch({ strict: false }) as { tab?: string }
 
   useEffect(() => {
     fetchAll()
@@ -28,16 +37,20 @@ export function DashboardAdmin() {
     try {
       setLoading(true)
       setError(null)
-      const [u, ts, ds] = await Promise.all([
+      const [u, ts, ds, t, d] = await Promise.all([
         getUsers(),
         getTasksStats(),
         getDocumentsStats(),
+        getAdminTasks(),
+        getAdminDocuments(),
       ])
       setUsers(u)
       setTaskStats(ts)
       setDocStats(ds)
+      setTasks(t)
+      setDocuments(d)
     } catch (err) {
-      setError('Failed to load admin data. Make sure you have admin privileges.')
+      setError('Failed to load admin data.')
       console.error(err)
     } finally {
       setLoading(false)
@@ -82,14 +95,6 @@ export function DashboardAdmin() {
       </Header>
 
       <Main>
-        {/* ── Overview ── */}
-        <div className='mb-6'>
-          <h2 className='text-xl font-semibold'>System Overview</h2>
-          <p className='text-muted-foreground'>
-            Monitor and manage your application
-          </p>
-        </div>
-
         {/* ── Stats Cards ── */}
         <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8'>
           <Card>
@@ -141,50 +146,144 @@ export function DashboardAdmin() {
           </Card>
         </div>
 
-        {/* ── Quick Actions ── */}
-        <div>
-          <h2 className='text-xl font-bold mb-4'>Quick Actions</h2>
-          <div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
-            <Card className='cursor-pointer hover:bg-accent transition-colors'>
-              <CardHeader>
-                <CardTitle className='text-base flex items-center gap-2'>
-                  <span>👥</span> Manage Users
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className='text-sm text-muted-foreground'>
-                  {users.length} registered users
-                </p>
-              </CardContent>
-            </Card>
+        {/* ── Tabs ── */}
+        <Tabs defaultValue={search.tab || 'tasks'}>
+          <TabsList className='mb-4'>
+            <TabsTrigger value='tasks'>📝 All Tasks</TabsTrigger>
+            <TabsTrigger value='documents'>📄 All Documents</TabsTrigger>
+            <TabsTrigger value='users'>👥 Users</TabsTrigger>
+          </TabsList>
 
-            <Card className='cursor-pointer hover:bg-accent transition-colors'>
-              <CardHeader>
-                <CardTitle className='text-base flex items-center gap-2'>
-                  <span>📝</span> View Tasks
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className='text-sm text-muted-foreground'>
-                  {taskStats.total} total tasks
-                </p>
-              </CardContent>
-            </Card>
+          {/* ── Tasks Tab ── */}
+          <TabsContent value='tasks'>
+            <div className='rounded-md border overflow-hidden'>
+              <table className='w-full text-sm'>
+                <thead className='bg-muted'>
+                  <tr>
+                    <th className='p-3 text-left font-medium'>Title</th>
+                    <th className='p-3 text-left font-medium'>Category</th>
+                    <th className='p-3 text-left font-medium'>Priority</th>
+                    <th className='p-3 text-left font-medium'>Status</th>
+                    <th className='p-3 text-left font-medium'>User ID</th>
+                    <th className='p-3 text-left font-medium'>Created</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tasks.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className='p-3 text-center text-muted-foreground'>
+                        No tasks found.
+                      </td>
+                    </tr>
+                  ) : (
+                    tasks.map((task) => (
+                      <tr key={task.id} className='border-t hover:bg-muted/50'>
+                        <td className='p-3 font-medium'>{task.title}</td>
+                        <td className='p-3 capitalize'>{task.category}</td>
+                        <td className='p-3 capitalize'>{task.priority}</td>
+                        <td className='p-3'>
+                          {task.completed ? (
+                            <span className='text-green-600 font-medium'>✅ Completed</span>
+                          ) : (
+                            <span className='text-orange-500 font-medium'>⏳ Pending</span>
+                          )}
+                        </td>
+                        <td className='p-3 text-muted-foreground'>{task.user_id}</td>
+                        <td className='p-3 text-muted-foreground'>
+                          {new Date(task.created_at).toLocaleDateString('en-GB')}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </TabsContent>
 
-            <Card className='cursor-pointer hover:bg-accent transition-colors'>
-              <CardHeader>
-                <CardTitle className='text-base flex items-center gap-2'>
-                  <span>📄</span> View Documents
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className='text-sm text-muted-foreground'>
-                  {docStats.total} total documents
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+          {/* ── Documents Tab ── */}
+          <TabsContent value='documents'>
+            <div className='rounded-md border overflow-hidden'>
+              <table className='w-full text-sm'>
+                <thead className='bg-muted'>
+                  <tr>
+                    <th className='p-3 text-left font-medium'>Title</th>
+                    <th className='p-3 text-left font-medium'>File Type</th>
+                    <th className='p-3 text-left font-medium'>Status</th>
+                    <th className='p-3 text-left font-medium'>User ID</th>
+                    <th className='p-3 text-left font-medium'>Created</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {documents.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className='p-3 text-center text-muted-foreground'>
+                        No documents found.
+                      </td>
+                    </tr>
+                  ) : (
+                    documents.map((doc) => (
+                      <tr key={doc.id} className='border-t hover:bg-muted/50'>
+                        <td className='p-3 font-medium'>{doc.title}</td>
+                        <td className='p-3 uppercase'>{doc.file_type}</td>
+                        <td className='p-3'>
+                          {doc.summary_status === 'completed' ? (
+                            <span className='text-green-600 font-medium'>✅ Processed</span>
+                          ) : (
+                            <span className='text-orange-500 font-medium'>⏳ Pending</span>
+                          )}
+                        </td>
+                        <td className='p-3 text-muted-foreground'>{doc.user_id}</td>
+                        <td className='p-3 text-muted-foreground'>
+                          {new Date(doc.created_at).toLocaleDateString('en-GB')}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </TabsContent>
+
+          {/* ── Users Tab ── */}
+          <TabsContent value='users'>
+            <div className='rounded-md border overflow-hidden'>
+              <table className='w-full text-sm'>
+                <thead className='bg-muted'>
+                  <tr>
+                    <th className='p-3 text-left font-medium'>Username</th>
+                    <th className='p-3 text-left font-medium'>Email</th>
+                    <th className='p-3 text-left font-medium'>Role</th>
+                    <th className='p-3 text-left font-medium'>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.length === 0 ? (
+                    <tr>
+                      <td colSpan={4} className='p-3 text-center text-muted-foreground'>
+                        No users found.
+                      </td>
+                    </tr>
+                  ) : (
+                    users.map((u) => (
+                      <tr key={u.id} className='border-t hover:bg-muted/50'>
+                        <td className='p-3 font-medium'>{u.username}</td>
+                        <td className='p-3 text-muted-foreground'>{u.email}</td>
+                        <td className='p-3 capitalize'>{u.role}</td>
+                        <td className='p-3'>
+                          {u.is_active ? (
+                            <span className='text-green-600 font-medium'>✅ Active</span>
+                          ) : (
+                            <span className='text-red-500 font-medium'>❌ Inactive</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </TabsContent>
+        </Tabs>
       </Main>
     </>
   )

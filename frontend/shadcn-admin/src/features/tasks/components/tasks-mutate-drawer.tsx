@@ -28,7 +28,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { taskCreateSchema, WEEK_DAYS, type Task, type TaskCreate } from '../data/schema'
-import { createTask, updateFutureTasks, updateTask } from '../data/tasks'
+import { createTask, updateTask } from '../data/tasks'
 import { useTasks } from './tasks-provider'
 
 type TaskMutateDrawerProps = {
@@ -132,15 +132,14 @@ export function TasksMutateDrawer({
           : undefined,
         recurrence_days: data.is_recurring ? data.recurrence_days : undefined,
       }
-
-      if (isUpdate && currentRow) {
-        if (currentRow.is_recurring || isRecurringChild) {
-          await updateFutureTasks(currentRow.id, payload)
-          toast.success('This and all future occurrences updated.')
-        } else {
-          await updateTask(currentRow.id, payload)
-          toast.success('Task updated successfully.')
-        }
+if (isUpdate && currentRow) {
+  if (currentRow.is_recurring || isRecurringChild) {
+    await updateTask(currentRow.id, payload)
+    toast.success('Task updated successfully.')
+  } else {
+    await updateTask(currentRow.id, payload)
+    toast.success('Task updated successfully.')
+  }
       } else {
         await createTask(payload)
         toast.success('Task created successfully.')

@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { format } from 'date-fns'
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useCalendar, type CalendarView } from './calendar-provider'
 
 export function CalendarHeader() {
@@ -19,11 +19,6 @@ export function CalendarHeader() {
     return format(currentDate, 'EEEE, MMMM d, yyyy')
   }
 
-  const handleNewTask = () => {
-    setNewTaskDate(new Date())
-    setIsCreating(true)
-    setIsDrawerOpen(true)
-  }
 
   return (
     <div className='flex flex-wrap items-center justify-between gap-3'>
@@ -60,11 +55,7 @@ export function CalendarHeader() {
           </TabsList>
         </Tabs>
 
-        {/* New task button */}
-        <Button className='gap-1' onClick={handleNewTask}>
-          <Plus className='size-4' />
-          <span>New Task</span>
-        </Button>
+
       </div>
     </div>
   )

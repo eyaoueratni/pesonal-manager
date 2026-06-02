@@ -17,6 +17,7 @@ from app.services.email_services import (
 router = APIRouter(prefix="/admin", tags=["admin"])
 
 
+# ── USERS ──────────────────────────────────────────────────────
 @router.get("/users", response_model=List[UserResponse])
 def get_users(
     skip: int = 0,
@@ -49,7 +50,6 @@ async def create_user(
     db.commit()
     db.refresh(new_user)
 
-    # Send welcome email
     try:
         await send_welcome_email(
             email=new_user.email,
@@ -149,7 +149,22 @@ async def deactivate_user(
     return {"message": "User deactivated"}
 
 
-# ── TASKS OVERVIEW ──────────────────────────────────────────────
+# ── TASKS ──────────────────────────────────────────────────────
+@router.get("/tasks/stats")
+def get_tasks_stats(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_admin),
+):
+    total = db.query(Task).count()
+    completed = db.query(Task).filter(Task.completed == True).count()
+    pending = db.query(Task).filter(Task.completed == False).count()
+    return {
+        "total": total,
+        "completed": completed,
+        "pending": pending,
+    }
+
+
 @router.get("/tasks")
 def get_all_tasks(
     skip: int = 0,
@@ -181,22 +196,26 @@ def get_all_tasks(
     ]
 
 
-@router.get("/tasks/stats")
-def get_tasks_stats(
+# ── DOCUMENTS ──────────────────────────────────────────────────
+@router.get("/documents/stats")
+def get_documents_stats(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_admin),
 ):
-    total = db.query(Task).count()
-    completed = db.query(Task).filter(Task.completed == True).count()
-    pending = db.query(Task).filter(Task.completed == False).count()
+    total = db.query(Document).count()
+    processed = db.query(Document).filter(
+        Document.summary_status == "completed"
+    ).count()
+    pending = db.query(Document).filter(
+        Document.summary_status == "pending"
+    ).count()
     return {
         "total": total,
-        "completed": completed,
+        "processed": processed,
         "pending": pending,
     }
 
 
-# ── DOCUMENTS OVERVIEW ───────────────────────────────────────────
 @router.get("/documents")
 def get_all_documents(
     skip: int = 0,
@@ -222,25 +241,6 @@ def get_all_documents(
         }
         for d in docs
     ]
-
-
-@router.get("/documents/stats")
-def get_documents_stats(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(require_admin),
-):
-    total = db.query(Document).count()
-    processed = db.query(Document).filter(
-        Document.summary_status == "completed"
-    ).count()
-    pending = db.query(Document).filter(
-        Document.summary_status == "pending"
-    ).count()
-    return {
-        "total": total,
-        "processed": processed,
-        "pending": pending,
-    }
 
 
 @router.delete("/documents/{document_id}")
